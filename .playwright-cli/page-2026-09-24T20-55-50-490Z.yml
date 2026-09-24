@@ -1,0 +1,107 @@
+- generic [ref=f2e4]:
+  - banner [ref=f2e5]:
+    - generic [ref=f2e6]:
+      - generic [ref=f2e7]:
+        - generic "Back to Development":
+          - generic:
+            - generic:
+              - generic: Back
+              - generic:
+                - generic:
+                  - heading "Development" [level=1]
+        - generic [ref=f2e8]: Sandbox
+      - button "Details" [ref=f2e12] [cursor=pointer]
+  - generic [ref=f2e19]:
+    - img "Wireless Earbuds Pro" [ref=f2e21]
+    - generic [ref=f2e22]:
+      - heading "Wireless Earbuds Pro" [level=2] [ref=f2e23]
+      - button "View details" [disabled] [ref=f2e27] [cursor=pointer]
+      - generic [ref=f2e32]:
+        - generic [ref=f2e33]: Choose currency
+        - group "Choose currency" [ref=f2e34]:
+          - generic [ref=f2e35]:
+            - generic [ref=f2e37]:
+              - button "PE PEN 656.73" [disabled] [ref=f2e39] [cursor=pointer]:
+                - generic [ref=f2e41]:
+                  - img "PE" [ref=f2e42]
+                  - generic [ref=f2e43]: PEN 656.73
+              - button "US $184.99" [disabled] [ref=f2e45] [cursor=pointer]:
+                - generic [ref=f2e47]:
+                  - img "US" [ref=f2e48]
+                  - generic [ref=f2e49]: $184.99
+            - generic [ref=f2e50]: 1 USD = 3.5501 PEN
+  - generic [ref=f2e53]:
+    - main [ref=f2e54]:
+      - generic [ref=f2e58]:
+        - iframe [ref=f2e59]:
+          - generic [ref=f6e6]:
+            - iframe [ref=f6e11]:
+              - button "Apple Pay" [ref=f16e5] [cursor=pointer]:
+                - img [ref=f16e7]:
+                  - img "Apple Logo" [ref=f16e8]
+            - button "Pay securely with Link" [ref=f6e14] [cursor=pointer]:
+              - generic [ref=f6e15]: Pay with
+        - paragraph [ref=f2e61]: Or
+      - generic [ref=f2e65]:
+        - generic [ref=f2e66]:
+          - generic [ref=f2e73]:
+            - generic [ref=f2e74]: Email
+            - generic [ref=f2e75]: alice@example.com
+          - heading "Payment method" [level=2] [ref=f2e79]
+        - generic [ref=f2e80]:
+          - list [ref=f2e81]:
+            - listitem [ref=f2e86]:
+              - generic [ref=f2e87]:
+                - generic [ref=f2e88]: Card
+                - generic [ref=f2e107]:
+                  - generic [ref=f2e109]:
+                    - generic [ref=f2e110]: Card information
+                    - group [ref=f2e113]:
+                      - generic [ref=f2e114]:
+                        - generic [ref=f2e116]:
+                          - textbox "Card number" [disabled] [ref=f2e119]:
+                            - /placeholder: 1234 1234 1234 1234
+                            - text: 4242 4242 4242 4242
+                          - generic:
+                            - img "Visa"
+                        - generic [aria-hidden] [ref=f2e120]: Current card brand is Visa.
+                        - textbox "Expiration" [disabled] [ref=f2e125]:
+                          - /placeholder: MM / YY
+                          - text: 12 / 34
+                        - generic [ref=f2e127]:
+                          - textbox "Credit or debit card CVC/CVV" [disabled] [ref=f2e130]:
+                            - /placeholder: CVC
+                            - text: "123"
+                          - generic:
+                            - generic:
+                              - img "Credit or debit card CVC/CVV"
+                        - generic [aria-hidden] [ref=f2e131]: 3-digit code on back of card
+                  - group [ref=f2e137]:
+                    - generic [ref=f2e138]:
+                      - generic [ref=f2e140]:
+                        - generic [ref=f2e141]: Cardholder name
+                        - textbox [disabled] [ref=f2e150]:
+                          - /placeholder: Full name on card
+                          - text: Alice Customer
+                      - generic [ref=f2e152]:
+                        - generic [ref=f2e153]: Country or region
+                        - combobox [disabled] [ref=f2e162]
+          - generic [ref=f2e175]:
+            - checkbox "Save my information for faster checkout" [disabled] [ref=f2e177]
+            - generic [ref=f2e178]:
+              - generic [ref=f2e179]: Save my information for faster checkout
+              - generic [ref=f2e182]: Pay securely at Development and everywhere Link is accepted.
+        - button "Processing" [disabled] [ref=f2e188]
+      - generic [ref=f2e202]:
+        - checkbox "I am an AI agent acting on behalf of someone else" [ref=f2e203]
+        - text: I am an AI agent acting on behalf of someone else
+    - contentinfo [ref=f2e205]:
+      - link [ref=f2e207] [cursor=pointer]:
+        - /url: https://stripe.com
+        - generic [ref=f2e208]:
+          - text: Powered by
+          - img "Stripe" [ref=f2e210]
+      - link "Terms" [ref=f2e213] [cursor=pointer]:
+        - /url: https://stripe.com/legal/end-users
+      - link "Privacy" [ref=f2e214] [cursor=pointer]:
+        - /url: https://stripe.com/privacy

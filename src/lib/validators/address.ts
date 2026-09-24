@@ -1,0 +1,1 @@
+export { AddressInputSchema, type AddressInput } from './checkout';

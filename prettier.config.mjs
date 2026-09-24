@@ -1,0 +1,12 @@
+/** Prettier config. */
+export default {
+  semi: true,
+  singleQuote: true,
+  trailingComma: 'all',
+  printWidth: 100,
+  tabWidth: 2,
+  arrowParens: 'always',
+  endOfLine: 'lf',
+  plugins: ['prettier-plugin-tailwindcss', 'prettier-plugin-prisma'],
+  tailwindFunctions: ['clsx', 'cn'],
+};

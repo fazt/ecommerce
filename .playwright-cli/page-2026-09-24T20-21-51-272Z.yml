@@ -1,0 +1,87 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "E Ecommerce" [ref=e6] [cursor=pointer]:
+            - /url: /en
+            - generic [ref=e7]: E
+            - generic [ref=e9]: Ecommerce
+          - navigation "Main" [ref=e10]:
+            - link "Products" [ref=e11] [cursor=pointer]:
+              - /url: /en/products
+            - link "Wishlist" [ref=e12] [cursor=pointer]:
+              - /url: /en/wishlist
+        - generic [ref=e13]:
+          - link "Cart" [ref=e14] [cursor=pointer]:
+            - /url: /en/cart
+          - button "Language" [ref=e19] [cursor=pointer]
+          - generic [ref=e23]:
+            - link "Sign in" [ref=e24] [cursor=pointer]:
+              - /url: /en/auth/login
+            - link "Create account" [ref=e25] [cursor=pointer]:
+              - /url: /en/auth/register
+    - main [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - heading "Sign in" [level=1] [ref=e29]
+          - paragraph [ref=e30]: Welcome back. Enter your credentials to continue.
+        - generic [ref=e33]:
+          - generic [ref=e34]:
+            - text: Email
+            - textbox "Email" [ref=e39]:
+              - /placeholder: you@example.com
+          - generic [ref=e40]:
+            - generic [ref=e41]:
+              - generic [ref=e42]: Password
+              - link "Forgot?" [ref=e43] [cursor=pointer]:
+                - /url: /auth/forgot-password
+            - textbox "Password" [ref=e48]:
+              - /placeholder: ••••••••
+          - button "Sign in" [ref=e49] [cursor=pointer]
+          - generic [ref=e52]: Demo credentials
+          - paragraph [ref=e57]: admin@example.com / admin1234
+        - paragraph [ref=e58]:
+          - text: Don't have an account?
+          - link "Create one" [ref=e59] [cursor=pointer]:
+            - /url: /auth/register
+    - contentinfo [ref=e60]:
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - generic [ref=e63]:
+            - generic [ref=e64]:
+              - generic [ref=e65]: E
+              - generic [ref=e67]: Ecommerce
+            - paragraph [ref=e68]: Production-ready ecommerce on Next.js 16.
+          - generic [ref=e69]:
+            - heading "Shop" [level=3] [ref=e70]
+            - list [ref=e71]:
+              - listitem [ref=e72]:
+                - link "Catalog" [ref=e73] [cursor=pointer]:
+                  - /url: /products
+              - listitem [ref=e74]:
+                - link "Cart" [ref=e75] [cursor=pointer]:
+                  - /url: /cart
+              - listitem [ref=e76]:
+                - link "Wishlist" [ref=e77] [cursor=pointer]:
+                  - /url: /wishlist
+          - generic [ref=e78]:
+            - heading "Support" [level=3] [ref=e79]
+            - list [ref=e80]:
+              - listitem [ref=e81]:
+                - link "Contact" [ref=e82] [cursor=pointer]:
+                  - /url: mailto:support@example.com
+              - listitem [ref=e83]:
+                - link "My account" [ref=e84] [cursor=pointer]:
+                  - /url: /account
+        - generic [ref=e85]:
+          - paragraph [ref=e86]: © 2026 Ecommerce. All rights reserved.
+          - generic [ref=e87]:
+            - link "GitHub" [ref=e88] [cursor=pointer]:
+              - /url: "#"
+            - link "Twitter" [ref=e92] [cursor=pointer]:
+              - /url: "#"
+            - link "Email" [ref=e95] [cursor=pointer]:
+              - /url: mailto:support@example.com
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e104] [cursor=pointer]

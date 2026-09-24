@@ -1,0 +1,30 @@
+# Local development stack.
+# A dedicated Postgres 17 instance on host port 5543 (avoids collision with
+# the system PG17 on 5432 and the other docker containers already in use).
+#
+# Usage:
+#   docker compose up -d
+#   docker compose down      # stop
+#   docker compose down -v   # stop + wipe data
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: ecommerce-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ecommerce
+      POSTGRES_PASSWORD: ecommerce
+      POSTGRES_DB: ecommerce
+    ports:
+      - "5543:5432"
+    volumes:
+      - ecommerce_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecommerce -d ecommerce"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  ecommerce_pg_data:

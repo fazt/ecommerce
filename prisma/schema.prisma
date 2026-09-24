@@ -1,0 +1,438 @@
+// Ecommerce Prisma schema.
+// Datasource: PostgreSQL 17. Models cover Auth.js v5, catalog, cart, wishlist,
+// orders (with Stripe + Tax + multi-currency), coupons, shipping zones,
+// reviews, addresses, audit log.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =========================================================================
+// Auth.js v5 standard tables
+// =========================================================================
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  emailVerified     DateTime?
+  name              String?
+  image             String?
+  hashedPassword    String?
+  role              Role      @default(USER)
+  preferredCurrency String    @default("USD")
+  preferredLocale   String    @default("en")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  carts         Cart[]
+  orders        Order[]
+  reviews       Review[]
+  wishlistItems WishlistItem[]
+  addresses     Address[]
+  auditLogs     AuditLog[]
+
+  @@index([role])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// =========================================================================
+// Catalog
+// =========================================================================
+
+model Category {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  imageUrl    String?
+  parentId    String?
+  parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+  products    Product[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([parentId])
+}
+
+model Product {
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  name              String
+  description       String   @db.Text
+  shortDescription  String?
+  priceCents        Int
+  compareAtCents    Int?
+  currency          String   @default("USD")
+  sku               String?  @unique
+  stock             Int      @default(0)
+  lowStockThreshold Int      @default(5)
+  weightGrams       Int?
+  taxCode           String?  // Stripe Tax code, e.g. txcd_10000000 (general)
+  images            ProductImage[]
+  categoryId        String?
+  category          Category? @relation(fields: [categoryId], references: [id])
+  isActive          Boolean  @default(true)
+  isFeatured        Boolean  @default(false)
+  tags              String[] @default([])
+  metadata          Json?
+  averageRating     Float    @default(0)
+  reviewCount       Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  cartItems     CartItem[]
+  orderItems    OrderItem[]
+  reviews       Review[]
+  wishlistItems WishlistItem[]
+
+  @@index([categoryId])
+  @@index([isActive, isFeatured])
+  @@index([isActive, createdAt])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  url       String
+  alt       String?
+  position  Int     @default(0)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, position])
+}
+
+// =========================================================================
+// Cart
+// =========================================================================
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CartItem[]
+  couponId  String?
+  updatedAt DateTime   @updatedAt
+  createdAt DateTime   @default(now())
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  cartId    String
+  productId String
+  quantity  Int     @default(1)
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
+  @@index([cartId])
+}
+
+// =========================================================================
+// Wishlist
+// =========================================================================
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([userId])
+}
+
+// =========================================================================
+// Orders
+// =========================================================================
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
+  REFUNDED
+  PARTIALLY_REFUNDED
+  FAILED
+}
+
+model Order {
+  id                    String      @id @default(cuid())
+  orderNumber           String      @unique // ORD-YYYY-NNNNN
+  userId                String
+  user                  User        @relation(fields: [userId], references: [id])
+  status                OrderStatus @default(PENDING)
+  email                 String
+
+  // Money (minor units; never float)
+  subtotalCents         Int
+  shippingCents         Int         @default(0)
+  taxCents              Int         @default(0)
+  discountCents         Int         @default(0)
+  totalCents            Int
+  currency              String
+
+  // Stripe
+  stripeSessionId       String?     @unique
+  stripePaymentIntentId String?     @unique
+  stripeCustomerId      String?
+  stripeTaxTransactionId String?
+  stripeShippingRateId  String?
+
+  // Addresses (snapshot)
+  shippingAddress       Json
+  billingAddress        Json
+
+  // Carrier
+  carrierName           String?
+  trackingNumber        String?
+  trackingUrl           String?
+  shippedAt             DateTime?
+  deliveredAt           DateTime?
+
+  notes                 String?     @db.Text
+
+  items   OrderItem[]
+  refunds Refund[]
+  coupon  Coupon?     @relation(fields: [couponId], references: [id])
+  couponId String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  paidAt    DateTime?
+
+  @@index([userId, createdAt])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id              String  @id @default(cuid())
+  orderId         String
+  productId       String?
+  productSnapshot Json    // { name, slug, imageUrl, sku, currency }
+  quantity        Int
+  unitPriceCents  Int
+  totalCents      Int
+
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+}
+
+model Refund {
+  id             String   @id @default(cuid())
+  orderId        String
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  stripeRefundId String   @unique
+  amountCents    Int
+  reason         String?
+  status         String
+  createdAt      DateTime @default(now())
+
+  @@index([orderId])
+}
+
+// =========================================================================
+// Reviews
+// =========================================================================
+
+model Review {
+  id         String   @id @default(cuid())
+  userId     String
+  productId  String
+  rating     Int
+  title      String?
+  comment    String?  @db.Text
+  isApproved Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([productId, isApproved])
+}
+
+// =========================================================================
+// Addresses
+// =========================================================================
+
+enum AddressType {
+  SHIPPING
+  BILLING
+  BOTH
+}
+
+model Address {
+  id         String      @id @default(cuid())
+  userId     String
+  type       AddressType @default(SHIPPING)
+  label      String?
+  line1      String
+  line2      String?
+  city       String
+  state      String?
+  postalCode String
+  country    String
+  phone      String?
+  isDefault  Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// =========================================================================
+// Coupons
+// =========================================================================
+
+enum CouponType {
+  PERCENTAGE
+  FIXED_AMOUNT
+  FREE_SHIPPING
+}
+
+model Coupon {
+  id            String       @id @default(cuid())
+  code          String       @unique
+  description   String?
+  type          CouponType
+  value         Int          // percent (0-100) or fixed cents
+  minOrderCents Int?
+  maxUses       Int?
+  currentUses   Int          @default(0)
+  startsAt      DateTime?
+  expiresAt     DateTime?
+  isActive      Boolean      @default(true)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  orders Order[]
+
+  @@index([code, isActive])
+}
+
+// =========================================================================
+// Shipping
+// =========================================================================
+
+model ShippingZone {
+  id        String         @id @default(cuid())
+  name      String
+  countries String[]       // ISO 3166-1 alpha-2
+  isActive  Boolean        @default(true)
+  rates     ShippingRate[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model ShippingRate {
+  id               String        @id @default(cuid())
+  zoneId           String
+  name             String
+  description      String?
+  minWeightGrams   Int?
+  maxWeightGrams   Int?
+  minSubtotalCents Int?
+  basePriceCents   Int
+  perKgCents       Int           @default(0)
+  deliveryDaysMin  Int?
+  deliveryDaysMax  Int?
+  isActive         Boolean       @default(true)
+  zone             ShippingZone  @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+
+  @@index([zoneId, isActive])
+}
+
+// =========================================================================
+// Audit log
+// =========================================================================
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String
+  changes   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([entity, entityId])
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// =========================================================================
+// Stripe event idempotency log (optional but recommended)
+// =========================================================================
+
+model StripeEvent {
+  id          String   @id @default(cuid())
+  stripeEventId String  @unique
+  type        String
+  processedAt DateTime @default(now())
+
+  @@index([type, processedAt])
+}

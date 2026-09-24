@@ -1,0 +1,106 @@
+- generic [active] [ref=f2e1]:
+  - generic [ref=f2e2]:
+    - banner [ref=f2e3]:
+      - generic [ref=f2e4]:
+        - generic [ref=f2e5]:
+          - link "E Ecommerce" [ref=f2e6] [cursor=pointer]:
+            - /url: /en
+            - generic [ref=f2e7]: E
+            - generic [ref=f2e9]: Ecommerce
+          - navigation "Main" [ref=f2e10]:
+            - link "Products" [ref=f2e11] [cursor=pointer]:
+              - /url: /en/products
+            - link "Wishlist" [ref=f2e12] [cursor=pointer]:
+              - /url: /en/wishlist
+        - generic [ref=f2e13]:
+          - link "Cart" [ref=f2e14] [cursor=pointer]:
+            - /url: /en/cart
+          - button "Language" [ref=f2e19] [cursor=pointer]
+          - button "T" [ref=f2e23] [cursor=pointer]
+    - main [ref=f2e27]:
+      - generic [ref=f2e28]:
+        - complementary [ref=f2e29]:
+          - navigation "Account" [ref=f2e30]:
+            - list [ref=f2e31]:
+              - listitem [ref=f2e32]:
+                - link "Overview" [ref=f2e33] [cursor=pointer]:
+                  - /url: /account
+              - listitem [ref=f2e39]:
+                - link "Orders" [ref=f2e40] [cursor=pointer]:
+                  - /url: /account/orders
+              - listitem [ref=f2e45]:
+                - link "Profile" [ref=f2e46] [cursor=pointer]:
+                  - /url: /account/profile
+              - listitem [ref=f2e50]:
+                - link "Addresses" [ref=f2e51] [cursor=pointer]:
+                  - /url: /account/addresses
+              - listitem [ref=f2e55]:
+                - link "My reviews" [ref=f2e56] [cursor=pointer]:
+                  - /url: /account/reviews
+              - listitem [ref=f2e59]:
+                - link "Wishlist" [ref=f2e60] [cursor=pointer]:
+                  - /url: /wishlist
+        - generic [ref=f2e63]:
+          - generic [ref=f2e65]:
+            - heading "Hi, Test" [level=1] [ref=f2e66]
+            - paragraph [ref=f2e67]: Orders, addresses and saved items in one place.
+          - generic [ref=f2e68]:
+            - link [ref=f2e69] [cursor=pointer]:
+              - /url: /account/orders
+              - term [ref=f2e70]: Orders
+              - definition [ref=f2e75]: "0"
+            - link [ref=f2e76] [cursor=pointer]:
+              - /url: /wishlist
+              - term [ref=f2e77]: Saved items
+              - definition [ref=f2e80]: "0"
+            - link [ref=f2e81] [cursor=pointer]:
+              - /url: /account/addresses
+              - term [ref=f2e82]: Addresses
+              - definition [ref=f2e86]: "0"
+          - generic [ref=f2e87]:
+            - generic [ref=f2e88]: Recent orders
+            - generic [ref=f2e91]:
+              - paragraph [ref=f2e98]: No orders yet
+              - link "Start shopping" [ref=f2e100] [cursor=pointer]:
+                - /url: /products
+    - contentinfo [ref=f2e101]:
+      - generic [ref=f2e102]:
+        - generic [ref=f2e103]:
+          - generic [ref=f2e104]:
+            - generic [ref=f2e105]:
+              - generic [ref=f2e106]: E
+              - generic [ref=f2e108]: Ecommerce
+            - paragraph [ref=f2e109]: Production-ready ecommerce on Next.js 16.
+          - generic [ref=f2e110]:
+            - heading "Shop" [level=3] [ref=f2e111]
+            - list [ref=f2e112]:
+              - listitem [ref=f2e113]:
+                - link "Catalog" [ref=f2e114] [cursor=pointer]:
+                  - /url: /products
+              - listitem [ref=f2e115]:
+                - link "Cart" [ref=f2e116] [cursor=pointer]:
+                  - /url: /cart
+              - listitem [ref=f2e117]:
+                - link "Wishlist" [ref=f2e118] [cursor=pointer]:
+                  - /url: /wishlist
+          - generic [ref=f2e119]:
+            - heading "Support" [level=3] [ref=f2e120]
+            - list [ref=f2e121]:
+              - listitem [ref=f2e122]:
+                - link "Contact" [ref=f2e123] [cursor=pointer]:
+                  - /url: mailto:support@example.com
+              - listitem [ref=f2e124]:
+                - link "My account" [ref=f2e125] [cursor=pointer]:
+                  - /url: /account
+        - generic [ref=f2e126]:
+          - paragraph [ref=f2e127]: © 2026 Ecommerce. All rights reserved.
+          - generic [ref=f2e128]:
+            - link "GitHub" [ref=f2e129] [cursor=pointer]:
+              - /url: "#"
+            - link "Twitter" [ref=f2e133] [cursor=pointer]:
+              - /url: "#"
+            - link "Email" [ref=f2e136] [cursor=pointer]:
+              - /url: mailto:support@example.com
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=f2e145] [cursor=pointer]
+  - alert [ref=f2e149]

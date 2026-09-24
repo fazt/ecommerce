@@ -1,0 +1,1 @@
+export { ReviewCreateSchema, ReviewUpdateSchema, type ReviewCreateInput } from './product';

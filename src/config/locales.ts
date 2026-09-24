@@ -1,0 +1,1 @@
+export { LOCALES, DEFAULT_LOCALE } from '@/lib/i18n';
