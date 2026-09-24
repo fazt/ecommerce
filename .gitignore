@@ -24,3 +24,6 @@ public/uploads/
 
 # pglite test cache
 tests/.pglite-cache/
+
+# Playwright CLI artifacts (test snapshots, console logs, screenshots)
+.playwright-cli/
